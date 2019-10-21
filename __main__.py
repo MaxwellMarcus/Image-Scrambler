@@ -86,7 +86,7 @@ if __name__ == '__main__':
     if len(sys.argv) == 4:
         pass
     else:
-        raise RequiresThreeInputs
+        raise InputError('3 inputs are required')
     pictures = os.listdir(sys.argv[1])
     try:
         chunk_size = int(sys.argv[2])
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     try:
         jitter = int(sys.argv[3])
     except ValueError:
-        raise MustInputInts
+        raise InputError('Jitter value must be int')
 
     #Scrambling all images
     new_pictures = []
@@ -103,7 +103,7 @@ if __name__ == '__main__':
         try:
             img = Image.open(sys.argv[1]+'\\'+i)
         except FileNotFoundError:
-            raise MustInputImages
+            raise InputError('Must input images')
 
         new_pictures.append(scramble(img,int(img.width/chunk_size),int(img.height/chunk_size),jitter))
 
