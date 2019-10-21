@@ -8,5 +8,6 @@ Takes images and scrambles the objects inside of them. It takes three command li
 
 3rd: Jitter Factor (integer)
 
+
 Example:
 python __main__.py "C:/My/Image/Directory" 50 3
