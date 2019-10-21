@@ -11,6 +11,9 @@ root = Tk()
 canvas = Canvas(root,width = root.winfo_screenwidth(),height=root.winfo_screenheight())
 canvas.pack()
 
+class RequiresThreeInputs(Exception):
+    pass
+
 def get_chunks(picture, num_chunks_x,num_chunks_y,jitter):
     picture_x = picture.width
     picture_y = picture.height
@@ -72,14 +75,18 @@ def get_chunks(picture, num_chunks_x,num_chunks_y,jitter):
 
 if __name__ == '__main__':
     #getting a picture as an input
+    if len(sys.argv) == 4:
+        pass
+    else:
+        raise RequiresThreeInputs
     pictures = os.listdir(sys.argv[1])
-    num_chunks_x = int(sys.argv[2])
+    chunk_size = int(sys.argv[2])
     jitter = int(sys.argv[3])
 
     new_pictures = []
     for i in pictures:
         img = Image.open(sys.argv[1]+'\\'+i)
-        new_pictures.append(get_chunks(img,num_chunks_x,num_chunks_x,jitter))
+        new_pictures.append(get_chunks(img,int(img.width/chunk_size),int(img.height/chunk_size),jitter))
 
     for i in range(len(pictures)):
         dot = pictures[i].index('.')
