@@ -21,11 +21,22 @@ def scramble(picture:Image, chunk_x:int,chunk_y:int,jitter:int) -> 'Scrambled Im
     '''
 
     #Getting information about image and chunks
-    picture_x = picture.width
-    picture_y = picture.height
+    try:
+        picture_x = picture.width
+        picture_y = picture.height
+    except:
+        raise InputError('Must input image')
 
-    num_chunks_x = int(picture_x/chunk_x)
-    num_chunks_y = int(picture_y/chunk_y)
+    try:
+        num_chunks_x = int(picture_x/chunk_x)
+        num_chunks_y = int(picture_y/chunk_y)
+    except:
+        raise InputError('chunk sizes must be ints')
+
+    try:
+        int(jitter)
+    except:
+        raise InputError('jitter must be int')
 
     final_picture = []
     all_chunks = []
@@ -51,7 +62,7 @@ def scramble(picture:Image, chunk_x:int,chunk_y:int,jitter:int) -> 'Scrambled Im
             data = chunk.load()
             for x1 in range(chunk_x):
                 for y1 in range(chunk_y):
-                    if not data[x1,y1][:3] == (225,225,225):
+                    if not data[x1,y1][0] >= 225 and not data[x1,y1][1] >= 225 and not data [x1,y1][2] >= 225:
                         if not first_useful:
                             first_useful = y_pos
                         last_useful = y_pos
@@ -81,7 +92,6 @@ def scramble(picture:Image, chunk_x:int,chunk_y:int,jitter:int) -> 'Scrambled Im
 
 
 if __name__ == '__main__':
-    print(scramble.__annotations__)
     #getting inputs
     if len(sys.argv) == 4:
         pass
@@ -102,10 +112,10 @@ if __name__ == '__main__':
     for i in pictures:
         try:
             img = Image.open(sys.argv[1]+'\\'+i)
-        except FileNotFoundError:
+        except:
             raise InputError('Must input images')
 
-        new_pictures.append(scramble(img,int(img.width/chunk_size),int(img.height/chunk_size),jitter))
+        new_pictures.append(scramble(img,chunk_size,chunk_size,jitter))
 
     #Putting new images into folder
     for i in range(len(pictures)):
